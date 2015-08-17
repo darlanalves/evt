@@ -1,0 +1,19 @@
+{
+  "name": "evt",
+  "main": "src/EventEmitter.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/darlanalves/evt",
+  "authors": [
+    "Darlan Alves <me@darlanalv.es>"
+  ],
+  "description": "General purpose EventEmitter with cancellable events and pause/resume capability",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "karma.conf.js",
+    "gulpfile.js"
+  ]
+}
