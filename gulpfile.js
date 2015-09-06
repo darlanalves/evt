@@ -2,14 +2,14 @@
 'use strict';
 
 var gulp = require('gulp'),
-	uglify = require('gulp-uglify'),
-	multipipe = require('multipipe'),
-	sourcemaps = require('gulp-sourcemaps'),
-	karma = require('karma').server,
 	version = require('./package.json').version;
 
 function buildRelease() {
 	console.log('Building version ' + version);
+	var uglify = require('gulp-uglify'),
+		sourcemaps = require('gulp-sourcemaps'),
+		multipipe = require('multipipe');
+
 	multipipe(
 		gulp.src('src/EventEmitter.js'),
 		sourcemaps.init(),
@@ -21,6 +21,7 @@ function buildRelease() {
 }
 
 function runTests(done) {
+	var karma = require('karma').server;
 	karma.start({
 		configFile: __dirname + '/karma.conf.js',
 		singleRun: true
@@ -28,6 +29,7 @@ function runTests(done) {
 }
 
 function tdd(done) {
+	var karma = require('karma').server;
 	karma.start({
 		configFile: __dirname + '/karma.conf.js'
 	}, done);

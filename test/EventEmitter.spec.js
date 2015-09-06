@@ -1,4 +1,7 @@
+/* globals EventEmitter */
+/* jshint jasmine: true */
 describe('EventEmitter', function() {
+	'use strict';
 	var ee;
 
 	beforeEach(function() {
@@ -8,7 +11,7 @@ describe('EventEmitter', function() {
 	afterEach(function() {
 		ee.off();
 		ee = null;
-	})
+	});
 
 	it('should have methods to register, emit and remove/clear event listeners', function() {
 		expect(typeof ee.on).toBe('function');
@@ -78,7 +81,7 @@ describe('EventEmitter', function() {
 			one: false,
 			two: false,
 			three: false
-		}
+		};
 
 		ee.on('stop-emitting', function() {
 			calls.one = true;
@@ -99,5 +102,31 @@ describe('EventEmitter', function() {
 		expect(calls.two).toBe(false);
 		expect(calls.three).toBe(false);
 		expect(result).toBe(false);
+	});
+
+	it('should have a method to add event capabilities to another object', function () {
+		var obj = {};
+
+		var handler = jasmine.createSpy('delegate');
+		ee.on('event', handler);
+		ee.delegate(obj);
+
+		expect(obj.__events__).toBe(ee);
+
+		obj.emit('event', 'foo', true);
+
+		var methods = ['on', 'off', 'once', 'emit', 'getListeners'];
+		methods.forEach(function (method) {
+			expect(typeof obj[method]).toBe('function');
+			spyOn(ee, method);
+
+			// checks if methods are bound to emitter
+			obj[method].call(null, 'foo');
+
+			expect(ee[method]).toHaveBeenCalled();
+		});
+
+
+		expect(handler).toHaveBeenCalledWith('foo', true);
 	});
 });

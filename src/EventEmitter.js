@@ -225,11 +225,27 @@
 			if (!eventName) continue;
 
 			result = $triggerEventsOfName.call(this, eventName, params);
-
-			// if (result === false) break;
 		}
 
 		return result;
+	}
+
+	function delegate(target) {
+		if (typeof target !== 'object') {
+			throw new Error('Invalid target object for delegation');
+		}
+
+		var methods = ['on', 'off', 'once', 'emit', 'getListeners'];
+		target.__events__ = this;
+
+		methods.forEach(function(method) {
+			var emitter = target.__events__;
+
+			this[method] = function() {
+				var fn = emitter[method];
+				fn.apply(emitter, arguments);
+			};
+		}, target);
 	}
 
 	EventEmitter.prototype = {
@@ -299,7 +315,13 @@
 		resumeEvents: function() {
 			this.pauseEvents = false;
 			return this;
-		}
+		},
+
+		/**
+		 * Delegates the instance methods to another object
+		 * @param {Object} target 	The object that receives the instance methods
+		 */
+		delegate: delegate
 	};
 
 	function factory() {
