@@ -207,6 +207,14 @@
 		return true;
 	}
 
+	function $proxyEvent(self, emitter, eventName) {
+		emitter.on(eventName, function() {
+			var args = Array.prototype.slice.call(arguments);
+			args.unshift(eventName);
+			self.emit.apply(self, args);
+		});
+	}
+
 	function triggerEvents(events) {
 		if (this.pauseEvents) {
 			return this;
@@ -246,6 +254,20 @@
 				fn.apply(emitter, arguments);
 			};
 		}, target);
+
+		return this;
+	}
+
+	function proxy(emitter, events) {
+		if (!Array.isArray(events)) {
+			events = [events];
+		}
+
+		events.forEach(function(eventName) {
+			$proxyEvent(this, emitter, eventName);
+		}, this);
+
+		return this;
 	}
 
 	EventEmitter.prototype = {
@@ -321,7 +343,14 @@
 		 * Delegates the instance methods to another object
 		 * @param {Object} target 	The object that receives the instance methods
 		 */
-		delegate: delegate
+		delegate: delegate,
+
+		/**
+		 * Relay events from another event emitter
+		 * @param {EventEmitter} target 	Another event emitter
+		 * @param {String[]} events 		The events to proxy
+		 */
+		proxy: proxy
 	};
 
 	function factory() {

@@ -129,4 +129,22 @@ describe('EventEmitter', function() {
 
 		expect(handler).toHaveBeenCalledWith('foo', true);
 	});
+
+	it('should have a method to proxy events from another event emitter', function () {
+		var proxyEmitter = new EventEmitter();
+
+		ee.proxy(proxyEmitter, ['one', 'two']);
+
+		var eventOne = jasmine.createSpy('one');
+		var eventTwo = jasmine.createSpy('two');
+
+		ee.on('one', eventOne);
+		ee.on('two', eventTwo);
+
+		proxyEmitter.emit('one', 1);
+		proxyEmitter.emit('two', 2);
+
+		expect(eventOne).toHaveBeenCalledWith(1);
+		expect(eventTwo).toHaveBeenCalledWith(2);
+	});
 });
