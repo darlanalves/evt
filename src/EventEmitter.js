@@ -362,7 +362,7 @@
 	} else if (typeof define === 'function' && define.amd) {
 		define(factory);
 	} else if (typeof module !== 'undefined' && module.exports) {
-		module.exports = EventEmitter;
+		module.exports.EventEmitter = EventEmitter;
 	} else {
 		global.EventEmitter = EventEmitter;
 	}
