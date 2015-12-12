@@ -1,5 +1,5 @@
 {
-  "name": "evt",
+  "name": "node-evt",
   "description": "EventEmitter implementation with cancellable events",
   "version": "0.2.0",
   "author": {
@@ -20,5 +20,5 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "gulp-sourcemaps": "^1.2.4"
   },
-  "main": "./src/EventEmitter"
+  "main": "./dist/EventEmitter.js"
 }
